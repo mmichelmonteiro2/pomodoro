@@ -2,21 +2,27 @@
 <html>
 
 <head>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <meta charset="UTF-8" />
-  <title>Hello World!</title>
-  <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'" />
-  <meta http-equiv="X-Content-Security-Policy" content="default-src 'self'; script-src 'self'" />
+  <title>Pomodoro</title>
+  <link rel="stylesheet" href="../reset.css" />
+  <link rel="stylesheet" href="./styles.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Rajdhani:wght@600&display=swap"
+    rel="stylesheet">
 </head>
 
 <body>
-  <h1>Hello World!</h1>
-  We are using Node.js <span id="node-version"></span>, Chromium
-  <span id="chrome-version"></span>, and Electron
-  <span id="electron-version"></span>.
-
-  <!-- You can also require other files to run in this process -->
-  <script src="./dist/renderer.js"></script>
+  <main>
+    <section id="timer">
+      <span class="number-wrapper">0</span>
+      <span class="number-wrapper">0</span>
+      :
+      <span class="number-wrapper">0</span>
+      <span class="number-wrapper">0</span>
+    </section>
+    <button class="start-countdown">Iniciar Ciclo</button>
+  </main>
 </body>
 
 </html>
