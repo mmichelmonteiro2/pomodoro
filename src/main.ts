@@ -12,7 +12,7 @@ function createWindow() {
   });
 
   // and load the index.html of the app.
-  mainWindow.loadFile(path.join(__dirname, "../views/main/index.html"));
+  mainWindow.loadFile(path.join(__dirname, "../views/welcome/index.html"));
 
   // Open the DevTools.
   mainWindow.webContents.openDevTools();
