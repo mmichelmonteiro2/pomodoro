@@ -27,6 +27,10 @@ main {
   gap: 2rem;
 }
 
+header {
+  color: var(--text);
+}
+
 section#timer {
   color: var(--text);
   font-family: 'Rajdhani';

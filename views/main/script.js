@@ -6,8 +6,18 @@ const startButton = document.querySelector('.button.start-countdown');
 const pauseButton = document.querySelector('.button.pause-countdown');
 const stopButton = document.querySelector('.button.stop-countdown');
 
+const greetingsDiv = document.getElementById('greetings');
+const focusDiv = document.getElementById('focus');
+const restDiv = document.getElementById('rest');
+
+const usernameSpan = document.querySelectorAll('.username');
+
 const timerSettings = {};
 let timerInterval;
+
+usernameSpan.forEach((span) => {
+  span.innerText = getUsersSettings().name;
+})
 
 function getUsersSettings() {
   const users = window.api.getUsers();
@@ -27,12 +37,19 @@ function timerSetup() {
   stopButton.style.display = 'none';
   quoteLabel.style.display = 'none';
 
+  greetingsDiv.style.display = 'block';
+  focusDiv.style.display = 'none';
+  restDiv.style.display = 'none';
+
   updateDisplay(timerSettings.focusTime);
 }
 
 timerSetup();
 
 function startTimer() {
+  greetingsDiv.style.display = 'none';
+  focusDiv.style.display = 'block';
+
   startButton.style.display = 'none';
   pauseButton.style.display = 'inline';
   stopButton.style.display = 'inline';
@@ -56,6 +73,8 @@ function startTimer() {
       else if (secondsRemaining === 0 && !timerSettings.isRestTime) {
         timerSettings.isRestTime = true;
         secondsRemaining = timerSettings.restTime;
+        restDiv.style.display = 'block';
+        focusDiv.style.display = 'none';
       }
     }
   }, 1000);
