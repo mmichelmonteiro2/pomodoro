@@ -19,8 +19,8 @@ function timerSetup() {
 
   timerSettings.isPaused = false;
   timerSettings.isRestTime = false;
-  timerSettings.focusTime = 0.1 * 60;
-  timerSettings.restTime = 0.1 * 60;
+  timerSettings.focusTime = focus_time * 60;
+  timerSettings.restTime = rest_time * 60;
 
   startButton.style.display = 'inline';
   pauseButton.style.display = 'none';
