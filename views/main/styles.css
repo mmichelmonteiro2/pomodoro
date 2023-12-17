@@ -5,6 +5,10 @@
   --border: #F0F1F3;
   --green: #4bd62d;
   --dark-green: #3fb125;
+  --yellow: #ebd300;
+  --dark-yellow: #c5b200;
+  --red: #950000;
+  --dark-red: #670000;
 }
 
 body {
@@ -44,17 +48,17 @@ section#timer {
   display: none;
 }
 
-button.start-countdown {
+button.button {
   border: none;
   cursor: pointer;
   padding: 1rem 8rem;
-
-  background: var(--green);
   color: var(--white);
   border-radius: 4px;
-
   font-size: 16px;
+}
 
+button.start-countdown {
+  background: var(--green);
   box-shadow: 0px 7px 0px 0px var(--dark-green);
   -webkit-box-shadow: 0px 7px 0px 0px var(--dark-green);
   -moz-box-shadow: 0px 7px 0px 0px var(--dark-green);
@@ -64,4 +68,32 @@ button.start-countdown:hover {
   box-shadow: 0px 5px 0px 0px var(--dark-green);
   -webkit-box-shadow: 0px 5px 0px 0px var(--dark-green);
   -moz-box-shadow: 0px 5px 0px 0px var(--dark-green);
+}
+
+button.pause-countdown {
+  padding: 1rem 6rem;
+  background: var(--yellow);
+  box-shadow: 0px 7px 0px 0px var(--dark-yellow);
+  -webkit-box-shadow: 0px 7px 0px 0px var(--dark-yellow);
+  -moz-box-shadow: 0px 7px 0px 0px var(--dark-yellow);
+}
+
+button.pause-countdown:hover { 
+  box-shadow: 0px 5px 0px 0px var(--dark-yellow);
+  -webkit-box-shadow: 0px 5px 0px 0px var(--dark-yellow);
+  -moz-box-shadow: 0px 5px 0px 0px var(--dark-yellow);
+}
+
+button.stop-countdown {
+  padding: 1rem;
+  background: var(--red);
+  box-shadow: 0px 7px 0px 0px var(--dark-red);
+  -webkit-box-shadow: 0px 7px 0px 0px var(--dark-red);
+  -moz-box-shadow: 0px 7px 0px 0px var(--dark-red);
+}
+
+button.stop-countdown:hover { 
+  box-shadow: 0px 5px 0px 0px var(--dark-red);
+  -webkit-box-shadow: 0px 5px 0px 0px var(--dark-red);
+  -moz-box-shadow: 0px 5px 0px 0px var(--dark-red);
 }

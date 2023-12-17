@@ -2,38 +2,70 @@ const minutesLabel = document.getElementById('minutes');
 const secondsLabel = document.getElementById('seconds');
 const quoteLabel = document.getElementById('quote');
 
+const startButton = document.querySelector('.button.start-countdown');
+const pauseButton = document.querySelector('.button.pause-countdown');
+const stopButton = document.querySelector('.button.stop-countdown');
+
+const timerSettings = {};
+let timerInterval;
+
 function getUsersSettings() {
   const users = window.api.getUsers();
-
   return users[0];
 }
 
-function startTimer() {
+function timerSetup() {
   const { focus_time, rest_time } = getUsersSettings();
 
-  let secondsRemaining = focus_time * 60;
-  updateDisplay(secondsRemaining);
+  timerSettings.isPaused = false;
+  timerSettings.isRestTime = false;
+  timerSettings.focusTime = focus_time * 60;
+  timerSettings.restTime = rest_time * 60;
 
-  const TIME_TO_CHANGE_QUOTES_IN_SECONDS = 5;
+  startButton.style.display = 'inline';
+  pauseButton.style.display = 'none';
+  stopButton.style.display = 'none';
+
+  updateDisplay(timerSettings.focusTime);
+}
+
+timerSetup();
+
+function startTimer() {
+  startButton.style.display = 'none';
+  pauseButton.style.display = 'inline';
+  stopButton.style.display = 'inline';
+
+  let secondsRemaining = timerSettings.focusTime;
+
+  updateDisplay(secondsRemaining);
   showRandomQuote();
 
-  let timeInterval = setInterval(() => {
-    secondsRemaining -= 1;
+  timerInterval = setInterval(() => {
+    if (!timerSettings.isPaused) {
+      secondsRemaining -= 1;
 
-    const shouldShowNewQuote = (
-      (initialTimeInSeconds - secondsRemaining) / TIME_TO_CHANGE_QUOTES_IN_SECONDS === 0
-    );
-
-    if (shouldShowNewQuote)
       showRandomQuote();
-
-    updateDisplay(secondsRemaining);
-
-    if (secondsRemaining <= 0) {
-      quoteLabel.style.display = 'none';
-      clearTimeout(timeInterval);
+  
+      updateDisplay(secondsRemaining);
+  
+      if (secondsRemaining <= 0) {
+        quoteLabel.style.display = 'none';
+        clearTimeout(timerInterval);
+      }
     }
   }, 1000);
+}
+
+function pauseTimer() {
+  timerSettings.isPaused = !timerSettings.isPaused;
+  if (timerSettings.isPaused) pauseButton.innerText = 'Retomar Ciclo';
+  else pauseButton.innerText = 'Pausar Ciclo';
+}
+
+function stopTimer() {
+  clearTimeout(timerInterval);
+  timerSetup();
 }
 
 function updateDisplay(secondsRemaining) {
