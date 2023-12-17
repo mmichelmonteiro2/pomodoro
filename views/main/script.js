@@ -8,7 +8,7 @@ function getUsersSettings() {
   return users[0];
 }
 
-function startTimer(initialTimeInSeconds) {
+function startTimer() {
   const { focus_time, rest_time } = getUsersSettings();
 
   let secondsRemaining = focus_time * 60;
@@ -23,8 +23,6 @@ function startTimer(initialTimeInSeconds) {
     const shouldShowNewQuote = (
       (initialTimeInSeconds - secondsRemaining) / TIME_TO_CHANGE_QUOTES_IN_SECONDS === 0
     );
-
-    console.log('shouldShowNewQuote => ', (initialTimeInSeconds - secondsRemaining) / TIME_TO_CHANGE_QUOTES_IN_SECONDS)
 
     if (shouldShowNewQuote)
       showRandomQuote();
