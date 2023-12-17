@@ -1,5 +1,6 @@
 const { app, BrowserWindow } = require("electron");
 const path = require("path");
+const { getUsers } = require("./database/usersmgr");
 
 function createWindow() {
   // Create the browser window.
@@ -11,9 +12,12 @@ function createWindow() {
     width: 800,
   });
 
-  // and load the index.html of the app.
-  mainWindow.loadFile(path.join(__dirname, "../views/welcome/index.html"));
-
+  if (getUsers().length === 0) {
+    mainWindow.loadFile(path.join(__dirname, "../views/welcome/index.html"));
+  } else {
+    mainWindow.loadFile(path.join(__dirname, "../views/main/index.html"));
+  }
+  
   // Open the DevTools.
   mainWindow.webContents.openDevTools();
 }
