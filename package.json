@@ -3,18 +3,14 @@
   "version": "1.0.0",
   "description": "A Pomodoro software",
   "scripts": {
-    "build": "tsc",
-    "watch": "tsc -w",
-    "lint": "eslint -c .eslintrc --ext .ts ./src",
-    "start": "npm run build && electron ./dist/main.js"
+    "start": "electron ./src/main.js"
   },
   "author": "Michel Monteiro",
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "^4.33.0",
-    "@typescript-eslint/parser": "^4.33.0",
-    "electron": "^28.0.0",
-    "eslint": "^7.32.0",
-    "typescript": "^4.8.3"
+    "electron": "^16.0.2",
+    "electron-rebuild": "^3.2.5"
   },
-  "dependencies": {}
+  "dependencies": {
+    "better-sqlite3-with-prebuilds": "^7.4.3"
+  }
 }

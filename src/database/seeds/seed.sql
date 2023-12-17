@@ -1,0 +1,6 @@
+CREATE TABLE users (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL,
+    focus_time INTEGER NOT NULL,
+    rest_time INTEGER NOT NULL
+);
