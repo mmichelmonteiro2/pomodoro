@@ -2,8 +2,16 @@ const minutesLabel = document.getElementById('minutes');
 const secondsLabel = document.getElementById('seconds');
 const quoteLabel = document.getElementById('quote');
 
+function getUsersSettings() {
+  const users = window.api.getUsers();
+
+  return users[0];
+}
+
 function startTimer(initialTimeInSeconds) {
-  let secondsRemaining = initialTimeInSeconds;
+  const { focus_time, rest_time } = getUsersSettings();
+
+  let secondsRemaining = focus_time * 60;
   updateDisplay(secondsRemaining);
 
   const TIME_TO_CHANGE_QUOTES_IN_SECONDS = 5;
