@@ -14,6 +14,7 @@ const usernameSpan = document.querySelectorAll('.username');
 
 const timerSettings = {};
 let timerInterval;
+let quoteInterval;
 
 usernameSpan.forEach((span) => {
   span.innerText = getUsersSettings().name;
@@ -29,8 +30,8 @@ function timerSetup() {
 
   timerSettings.isPaused = false;
   timerSettings.isRestTime = false;
-  timerSettings.focusTime = focus_time * 60;
-  timerSettings.restTime = rest_time * 60;
+  timerSettings.focusTime = 5 * 60;
+  timerSettings.restTime = 5 * 60;
 
   startButton.style.display = 'inline';
   pauseButton.style.display = 'none';
@@ -62,8 +63,6 @@ function startTimer() {
   timerInterval = setInterval(() => {
     if (!timerSettings.isPaused) {
       secondsRemaining -= 1;
-
-      showRandomQuote();
   
       updateDisplay(secondsRemaining);
   
@@ -78,6 +77,12 @@ function startTimer() {
       }
     }
   }, 1000);
+
+  quoteInterval = setInterval(() => {
+    if (!timerSettings.isPaused) {
+      showRandomQuote();
+    }
+  }, 5000);
 }
 
 function pauseTimer() {
@@ -88,6 +93,7 @@ function pauseTimer() {
 
 function stopTimer() {
   clearTimeout(timerInterval);
+  clearTimeout(quoteInterval);
   timerSetup();
 }
 
