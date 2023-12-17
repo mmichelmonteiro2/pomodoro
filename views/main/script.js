@@ -19,12 +19,13 @@ function timerSetup() {
 
   timerSettings.isPaused = false;
   timerSettings.isRestTime = false;
-  timerSettings.focusTime = focus_time * 60;
-  timerSettings.restTime = rest_time * 60;
+  timerSettings.focusTime = 0.1 * 60;
+  timerSettings.restTime = 0.1 * 60;
 
   startButton.style.display = 'inline';
   pauseButton.style.display = 'none';
   stopButton.style.display = 'none';
+  quoteLabel.style.display = 'none';
 
   updateDisplay(timerSettings.focusTime);
 }
@@ -49,9 +50,12 @@ function startTimer() {
   
       updateDisplay(secondsRemaining);
   
-      if (secondsRemaining <= 0) {
-        quoteLabel.style.display = 'none';
-        clearTimeout(timerInterval);
+      if (secondsRemaining === 0 && timerSettings.isRestTime) {
+        stopTimer();
+      }
+      else if (secondsRemaining === 0 && !timerSettings.isRestTime) {
+        timerSettings.isRestTime = true;
+        secondsRemaining = timerSettings.restTime;
       }
     }
   }, 1000);
