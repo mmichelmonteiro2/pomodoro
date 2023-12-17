@@ -7,6 +7,11 @@ const getUsers = () => {
   return usersmgr.getUsers();
 };
 
+const insertUser = (name, focusTime, restTime) => {
+  return usersmgr.insertUser(name, focusTime, restTime);
+}
+
 contextBridge.exposeInMainWorld("api", {
   getUsers: getUsers,
+  insertUser: insertUser
 });

@@ -25,6 +25,12 @@ exports.getUsers = () => {
 
   return result;
 };
+
+exports.insertUser = (name, focusTime, restTime) => {
+  const sql = `INSERT INTO users(name,focus_time,rest_time) VALUES('${name}',${focusTime},${restTime})`;
+  const statement = dbmgr.db.prepare(sql);
+  statement.run();
+}
 // exports.getUser = find;
 // exports.updateUser = update;
 // exports.removeUser = remove;

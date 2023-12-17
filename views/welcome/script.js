@@ -12,7 +12,6 @@ const userNameElement = document.getElementById('name');
 const steps = document.querySelectorAll('div.step-container');
 
 function handleStep(formPosition) {
-
   const shouldStopSteps = formPosition === steps.length - 1;
 
   if (shouldStopSteps) return;
@@ -34,8 +33,11 @@ function handleSetFocusTime() {
   restTimeElement.value = restTime;
 }
 
-function goToPomodoro() {
-  window.location.href = '../main/index.html'
+function finishSetup() {
+  const { name, focusTime, restTime } = userSettings;
+  window.api.insertUser(name, focusTime, restTime);
+  
+  window.location.href = '../main/index.html';
 }
 
 focusTimeElement.addEventListener('input', handleSetFocusTime);
