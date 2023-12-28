@@ -2,6 +2,7 @@
 
 const { contextBridge } = require("electron");
 const usersmgr = require("./database/usersmgr");
+const pomodorosmgr = require("./database/pomodorosmgr");
 
 const getUsers = () => {
   return usersmgr.getUsers();
@@ -15,8 +16,23 @@ const updateTimer = (focusTime, restTime) => {
   return usersmgr.updateTimer(focusTime, restTime);
 }
 
+const startPomodoro = () => {
+  return pomodorosmgr.startPomodoro();
+}
+
+const endPomodoro = (focusTime, restTime, finishedCount) => {
+  return pomodorosmgr.endPomodoro(focusTime, restTime, finishedCount);
+}
+
+const getHistory = () => {
+  return pomodorosmgr.getHistory();
+}
+
 contextBridge.exposeInMainWorld("api", {
   getUsers: getUsers,
   insertUser: insertUser,
-  updateTimer: updateTimer
+  updateTimer: updateTimer,
+  startPomodoro: startPomodoro,
+  endPomodoro: endPomodoro,
+  getHistory: getHistory
 });

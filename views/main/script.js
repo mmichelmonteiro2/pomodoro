@@ -48,10 +48,32 @@ function timerSetup() {
   if (!localStorage.getItem("rest_time_total"))
     localStorage.setItem("rest_time_total", 0);
 
+  if (!localStorage.getItem("cycles_total"))
+    localStorage.setItem("cycles_total", 0);
+
   updateDisplay(timerSettings.focusTime);
 }
 
 timerSetup();
+
+function startPomodoro() {
+  window.api.startPomodoro();
+  startTimer();
+}
+
+function endPomodoro() {
+  const totalFocusTime = Number(localStorage.getItem("focus_time_total"));
+  const totalRestTime = Number(localStorage.getItem("rest_time_total"));
+  const totalCycles = Number(localStorage.getItem("cycles_total"));
+
+  window.api.endPomodoro(totalFocusTime, totalRestTime, totalCycles);
+
+  localStorage.setItem("focus_time_total", 0)
+  localStorage.setItem("rest_time_total", 0)
+  localStorage.setItem("cycles_total", 0)
+  
+  stopTimer();
+}
 
 function startTimer() {
   greetingsDiv.style.display = 'none';
@@ -64,6 +86,7 @@ function startTimer() {
   let secondsRemaining = timerSettings.focusTime;
   let localStorageTimer = "focus_time_total";
 
+  
   updateDisplay(secondsRemaining);
   showRandomQuote();
 
@@ -79,7 +102,7 @@ function startTimer() {
       );
 
       if (secondsRemaining === 0 && timerSettings.isRestTime) {
-        stopTimer();
+        restartTimer();
       }
       else if (secondsRemaining === 0 && !timerSettings.isRestTime) {
         timerSettings.isRestTime = true;
@@ -102,6 +125,17 @@ function pauseTimer() {
   timerSettings.isPaused = !timerSettings.isPaused;
   if (timerSettings.isPaused) pauseButton.innerText = 'Retomar Ciclo';
   else pauseButton.innerText = 'Pausar Ciclo';
+}
+
+function restartTimer() {
+  localStorage.setItem(
+    "cycles_total",
+    Number(localStorage.getItem("cycles_total")) + 1
+  );
+  clearTimeout(timerInterval);
+  clearTimeout(quoteInterval);
+  timerSetup();
+  startTimer();
 }
 
 function stopTimer() {
