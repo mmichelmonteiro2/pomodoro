@@ -44,8 +44,8 @@ history.forEach((cycle) => {
 
   startedAt.innerText = formatDate(started_at);
   endedAt.innerText = formatDate(ended_at);
-  focusTime.innerText = focus_time;
-  restTime.innerText = rest_time;
+  focusTime.innerText = secondsToMinutes(Number(focus_time));
+  restTime.innerText = secondsToMinutes(Number(focus_time));
   finishedCount.innerText = finished_count;
 
   tableRow.appendChild(startedAt);
@@ -56,6 +56,11 @@ history.forEach((cycle) => {
 
   tableContentElement.appendChild(tableRow);
 });
+
+// Função para converter segundos em minutos e arredondar
+function secondsToMinutes(seconds) {
+  return Math.round(seconds / 60);
+}
 
 // Função para formatar a data do banco de dados e deixar mais legível ao usuário
 function formatDate(date) {
