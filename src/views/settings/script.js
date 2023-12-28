@@ -1,7 +1,13 @@
-// Objeto de configuração inicial do tempo de pomodoro
+// Objeto de configuração inicial do tempo de pomodoro que o usuário definiu em sua
+// primeira configuração
+const { 
+  focus_time: focusTime,
+  rest_time: restTime
+} = window.api.getUsers()[0];
+
 const timerSettings = {
-  focusTime: 0,
-  restTime: 0
+  focusTime,
+  restTime
 };
 
 // Captura os elementos visuais de tempo de foco e tempo de descanso
