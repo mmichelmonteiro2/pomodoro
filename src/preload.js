@@ -28,11 +28,16 @@ const getHistory = () => {
   return pomodorosmgr.getHistory();
 }
 
+const clearHistory = () => {
+  return pomodorosmgr.clearHistory();
+}
+
 contextBridge.exposeInMainWorld("api", {
   getUsers: getUsers,
   insertUser: insertUser,
   updateTimer: updateTimer,
   startPomodoro: startPomodoro,
   endPomodoro: endPomodoro,
-  getHistory: getHistory
+  getHistory: getHistory,
+  clearHistory: clearHistory
 });

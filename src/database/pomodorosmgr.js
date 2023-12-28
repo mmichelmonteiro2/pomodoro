@@ -15,6 +15,12 @@ exports.startPomodoro = () => {
   statement.run();
 }
 
+exports.clearHistory = () => {
+  const sql = `DELETE FROM pomodoros`;
+  const statement = dbmgr.db.prepare(sql);
+  statement.run();
+}
+
 exports.endPomodoro = (focusTime, restTime, finishedCount) => {
   const date = new Date();
   const sql = `UPDATE pomodoros SET ended_at='${date}',focus_time=${focusTime},rest_time=${restTime},finished_count=${finishedCount} WHERE ended_at IS NULL`;

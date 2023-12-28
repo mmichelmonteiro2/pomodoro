@@ -5,14 +5,8 @@
   --border: #F0F1F3;
   --green: #4bd62d;
   --dark-green: #3fb125;
-}
-
-body {
-  background: var(--background);
-  height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  --red: #950000;
+  --dark-red: #670000;
 }
 
 main {
@@ -33,43 +27,15 @@ header {
   margin-bottom: 2rem;
 }
 
-.step {
-  font-size: 0.75rem;
-  font-style: italic;
+article {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  margin-bottom: 1rem;
 }
 
 h1 {
   color: var(--green);
-}
-
-label#label-name {
-  display: block;
-  margin-bottom: 1rem;
-}
-
-.input {
-  border: none;
-  outline: none;
-  border-bottom: 1px solid var(--green);
-  font-family: 'Inter';
-  padding: .5rem .5rem;
-  font-size: 20px;
-}
-
-button {
-  border: none;
-  cursor: pointer;
-  padding: .5rem 1rem;
-
-  background: var(--green);
-  color: var(--white);
-  border-radius: 4px;
-
-  font-size: 16px;
-
-  box-shadow: 0px 4px 0px 0px var(--dark-green);
-  -webkit-box-shadow: 0px 4px 0px 0px var(--dark-green);
-  -moz-box-shadow: 0px 4px 0px 0px var(--dark-green);
 }
 
 footer {
@@ -77,30 +43,58 @@ footer {
   justify-content: flex-end;
 }
 
-input.pomodoro {
-  font-size: 50px;
-  border-bottom: 0;
-  color: gray;
-}
-
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
+table {
+  border-collapse: collapse;
   margin: 0;
+  padding: 0;
+  width: 100%;
+  table-layout: fixed;
+
+  display: block;
+  height: 300px;
+  overflow-y: scroll;
 }
 
-/* Firefox */
-input[type=number] {
-  -moz-appearance: textfield;
+table caption {
+  font-size: 1.5em;
+  margin: .5em 0 .75em;
 }
 
-.pomodoro-setting-wrapper {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+table tr {
+  background-color: #f8f8f8;
+  border: 1px solid #ddd;
+  padding: .35em;
 }
 
-.pomodoro-setting-wrapper span {
-  font-size: 50px;
-  margin-right: .85rem;
+table th,
+table td {
+  padding: .625em;
+  text-align: center;
+}
+
+table th {
+  font-size: .85em;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+
+button {
+  margin-top: 1rem;
+  border: none;
+  cursor: pointer;
+  padding: 1rem 8rem;
+  color: var(--white);
+  border-radius: 4px;
+  font-size: 16px;
+  padding: .5rem 1rem;
+  background: var(--red);
+  box-shadow: 0px 7px 0px 0px var(--dark-red);
+  -webkit-box-shadow: 0px 7px 0px 0px var(--dark-red);
+  -moz-box-shadow: 0px 7px 0px 0px var(--dark-red);
+}
+
+button:hover { 
+  box-shadow: 0px 5px 0px 0px var(--dark-red);
+  -webkit-box-shadow: 0px 5px 0px 0px var(--dark-red);
+  -moz-box-shadow: 0px 5px 0px 0px var(--dark-red);
 }

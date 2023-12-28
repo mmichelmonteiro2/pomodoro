@@ -19,21 +19,37 @@
         <h1>Estatísticas &#128202;</h1>
       </header>
       <section>
-        <p>Na esquerda, selecione diga-nos a quantidade de minutos de foco,<br> enquanto na direita, nos informe os
-          minutos
-          de descanso.</p><br>
-        <p>Caso, no passo 2, tenha selecionado a proporção comum de 5:1,<br> o cálculo será realizado automaticamente
-          para
-          os minutos de descanso.</p><br>
-        <div class="pomodoro-setting-wrapper">
-          <input onchange="handleSetFocusTime()" class="input pomodoro" value="25" id="focus-time" type="number" min="0"
-            max="59" required>
-          <span>&#128073;</span>
-          <input class="input pomodoro" value="5" id="rest-time" type="number" min="0" max="59" required>
-        </div>
+        <article>
+          <div>
+            <h2>Tempo Total em Foco</h2>
+            <h1 id="total-focus-time">x minutos</h1>
+          </div>
+          <div>
+            <h2>Tempo Total em Descanso</h2>
+            <h1 id="total-rest-time">x minutos</h1>
+          </div>
+          <div>
+            <h2>Quantidade Total de Ciclos</h2>
+            <h1 id="total-cycle-time">x minutos</h1>
+          </div>
+        </article>
+        <table>
+          <caption>Histórico</caption>
+          <thead>
+            <tr>
+              <th scope="col">Início</th>
+              <th scope="col">Término</th>
+              <th scope="col">Tempo em Foco</th>
+              <th scope="col">Tempo em Descanso</th>
+              <th scope="col">Quantidade de Ciclos</th>
+            </tr>
+          </thead>
+          <tbody>
+          </tbody>
+        </table>
       </section>
       <footer>
-        <button onclick="finishSetup()">Iniciar</button>
+        <button onclick="clearHistory()">Apagar Histórico</button>
       </footer>
     </div>
   </main>
