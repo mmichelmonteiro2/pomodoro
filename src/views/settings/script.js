@@ -37,4 +37,9 @@ function finishSetup() {
   window.location.href = '../main/index.html';
 }
 
+// Função para fazer com que o usuário volte para a tela do timer
+function goBack() {
+  window.location.href = '../main/index.html';
+}
+
 focusTimeElement.addEventListener('input', handleSetFocusTime);

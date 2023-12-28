@@ -80,6 +80,7 @@ table th {
 
 button {
   margin-top: 1rem;
+  margin-left: 1rem;
   border: none;
   cursor: pointer;
   padding: 1rem 8rem;
@@ -87,13 +88,27 @@ button {
   border-radius: 4px;
   font-size: 16px;
   padding: .5rem 1rem;
+
+  background: var(--green);
+  box-shadow: 0px 7px 0px 0px var(--dark-green);
+  -webkit-box-shadow: 0px 7px 0px 0px var(--dark-green);
+  -moz-box-shadow: 0px 7px 0px 0px var(--dark-green);
+}
+
+button:hover {
+  box-shadow: 0px 5px 0px 0px var(--dark-green);
+  -webkit-box-shadow: 0px 5px 0px 0px var(--dark-green);
+  -moz-box-shadow: 0px 5px 0px 0px var(--dark-green);
+}
+
+button.erase {
   background: var(--red);
   box-shadow: 0px 7px 0px 0px var(--dark-red);
   -webkit-box-shadow: 0px 7px 0px 0px var(--dark-red);
   -moz-box-shadow: 0px 7px 0px 0px var(--dark-red);
 }
 
-button:hover { 
+button.erase:hover { 
   box-shadow: 0px 5px 0px 0px var(--dark-red);
   -webkit-box-shadow: 0px 5px 0px 0px var(--dark-red);
   -moz-box-shadow: 0px 5px 0px 0px var(--dark-red);
