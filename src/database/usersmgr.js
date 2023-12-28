@@ -31,6 +31,12 @@ exports.insertUser = (name, focusTime, restTime) => {
   const statement = dbmgr.db.prepare(sql);
   statement.run();
 }
+
+exports.updateTimer = (focusTime, restTime) => {
+  const sql = `UPDATE users SET focus_time = ${focusTime}, rest_time = ${restTime}`;
+  const statement = dbmgr.db.prepare(sql);
+  statement.run();
+}
 // exports.getUser = find;
 // exports.updateUser = update;
 // exports.removeUser = remove;

@@ -30,8 +30,8 @@ function timerSetup() {
 
   timerSettings.isPaused = false;
   timerSettings.isRestTime = false;
-  timerSettings.focusTime = 5 * 60;
-  timerSettings.restTime = 5 * 60;
+  timerSettings.focusTime = 0.1 * 60;
+  timerSettings.restTime = 0.2 * 60;
 
   startButton.style.display = 'inline';
   pauseButton.style.display = 'none';
@@ -41,6 +41,12 @@ function timerSetup() {
   greetingsDiv.style.display = 'block';
   focusDiv.style.display = 'none';
   restDiv.style.display = 'none';
+
+  if (!localStorage.getItem("focus_time_total"))
+    localStorage.setItem("focus_time_total", 0);
+
+  if (!localStorage.getItem("rest_time_total"))
+    localStorage.setItem("rest_time_total", 0);
 
   updateDisplay(timerSettings.focusTime);
 }
@@ -56,6 +62,7 @@ function startTimer() {
   stopButton.style.display = 'inline';
 
   let secondsRemaining = timerSettings.focusTime;
+  let localStorageTimer = "focus_time_total";
 
   updateDisplay(secondsRemaining);
   showRandomQuote();
@@ -65,12 +72,18 @@ function startTimer() {
       secondsRemaining -= 1;
   
       updateDisplay(secondsRemaining);
-  
+
+      localStorage.setItem(
+        localStorageTimer,
+        Number(localStorage.getItem(localStorageTimer)) + 1
+      );
+
       if (secondsRemaining === 0 && timerSettings.isRestTime) {
         stopTimer();
       }
       else if (secondsRemaining === 0 && !timerSettings.isRestTime) {
         timerSettings.isRestTime = true;
+        localStorageTimer = "rest_time_total";
         secondsRemaining = timerSettings.restTime;
         restDiv.style.display = 'block';
         focusDiv.style.display = 'none';

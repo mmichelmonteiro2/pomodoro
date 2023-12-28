@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <meta charset="UTF-8" />
+  <title>Pomodoro</title>
+  <link rel="stylesheet" href="../reset.css" />
+  <link rel="stylesheet" href="./styles.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Rajdhani:wght@600&display=swap"
+    rel="stylesheet">
+</head>
+
+<body>
+  <main>
+    <div class="step-container">
+      <header>
+        <h1>Como gostaria de focar? &#128337;</h1>
+      </header>
+      <section>
+        <p>Na esquerda, selecione diga-nos a quantidade de minutos de foco,<br> enquanto na direita, nos informe os
+          minutos
+          de descanso.</p><br>
+        <p>Caso, no passo 2, tenha selecionado a proporção comum de 5:1,<br> o cálculo será realizado automaticamente
+          para
+          os minutos de descanso.</p><br>
+        <div class="pomodoro-setting-wrapper">
+          <input onchange="handleSetFocusTime()" class="input pomodoro" value="25" id="focus-time" type="number" min="0"
+            max="59" required>
+          <span>&#128073;</span>
+          <input class="input pomodoro" value="5" id="rest-time" type="number" min="0" max="59" required>
+        </div>
+      </section>
+      <footer>
+        <button onclick="finishSetup()">Iniciar</button>
+      </footer>
+    </div>
+  </main>
+  <script src="./script.js"></script>
+  <script src="../../src/renderer.js"></script>
+</body>
+
+</html>

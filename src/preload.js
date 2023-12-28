@@ -11,7 +11,12 @@ const insertUser = (name, focusTime, restTime) => {
   return usersmgr.insertUser(name, focusTime, restTime);
 }
 
+const updateTimer = (focusTime, restTime) => {
+  return usersmgr.updateTimer(focusTime, restTime);
+}
+
 contextBridge.exposeInMainWorld("api", {
   getUsers: getUsers,
-  insertUser: insertUser
+  insertUser: insertUser,
+  updateTimer: updateTimer
 });
