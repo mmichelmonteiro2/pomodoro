@@ -1,43 +1,43 @@
-// All of the Node.js APIs are available in the preload process.
-
 const { contextBridge } = require("electron");
-const usersmgr = require("./database/usersmgr");
-const pomodorosmgr = require("./database/pomodorosmgr");
 
-const getUsers = () => {
-  return usersmgr.getUsers();
+const { 
+  getUsers: getUsersDAO,
+  insertUser: insertUserDAO,
+  updateTimer: updateTimerDAO
+} = require("./database/dao/users.dao");
+const {
+  startPomodoro: startPomodoroDAO,
+  endPomodoro: endPomodoroDAO,
+  getHistory: getHistoryDAO,
+  clearHistory: clearHistoryDAO
+} = require("./database/dao/pomodoros.dao");
+
+// Importa todas as manipulações no banco de dados para as entidades "users" e
+// "pomodoros", as declara em arrow functions e prepara sua execução
+
+const getUsers = () => getUsersDAO();
+const insertUser = (name, focusTime, restTime) => insertUserDAO(name, focusTime, restTime);
+const updateTimer = (focusTime, restTime) => updateTimerDAO(focusTime, restTime);
+
+const startPomodoro = () => startPomodoroDAO();
+const endPomodoro = (focusTime, restTime, finishedCount) => endPomodoroDAO(focusTime, restTime, finishedCount);
+const getHistory = () => getHistoryDAO();
+const clearHistory = () => clearHistoryDAO();
+
+// Guarda todas as arrow functions neste objeto
+const api = {
+  getUsers,
+  insertUser,
+  updateTimer,
+  startPomodoro,
+  endPomodoro,
+  getHistory,
+  clearHistory
 };
 
-const insertUser = (name, focusTime, restTime) => {
-  return usersmgr.insertUser(name, focusTime, restTime);
-}
-
-const updateTimer = (focusTime, restTime) => {
-  return usersmgr.updateTimer(focusTime, restTime);
-}
-
-const startPomodoro = () => {
-  return pomodorosmgr.startPomodoro();
-}
-
-const endPomodoro = (focusTime, restTime, finishedCount) => {
-  return pomodorosmgr.endPomodoro(focusTime, restTime, finishedCount);
-}
-
-const getHistory = () => {
-  return pomodorosmgr.getHistory();
-}
-
-const clearHistory = () => {
-  return pomodorosmgr.clearHistory();
-}
-
-contextBridge.exposeInMainWorld("api", {
-  getUsers: getUsers,
-  insertUser: insertUser,
-  updateTimer: updateTimer,
-  startPomodoro: startPomodoro,
-  endPomodoro: endPomodoro,
-  getHistory: getHistory,
-  clearHistory: clearHistory
-});
+// Expõe todas as chamadas a cima para a aplicação
+// Isso é necessário, pois, por mais que o código da aplicação esteja no mesmo
+// projeto, a parte de banco de dados não se comunica nativamente com a parte
+// visual do projeto por razões de segurança.
+// Dessa forma, devemos expôr manualmente chamada por chamada para a parte visual
+contextBridge.exposeInMainWorld("api", api);

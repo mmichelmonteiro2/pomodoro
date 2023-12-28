@@ -1,9 +1,10 @@
 const { app, BrowserWindow } = require("electron");
+const { getUsers } = require("./database/dao/users.dao");
+
 const path = require("path");
-const { getUsers } = require("./database/usersmgr");
 
 function createWindow() {
-  // Create the browser window.
+  // Cria a janela da aplicação com 600 de altura para 800 de largura
   const mainWindow = new BrowserWindow({
     height: 600,
     webPreferences: {
@@ -12,37 +13,36 @@ function createWindow() {
     width: 800,
   });
 
-  if (getUsers().length === 0) {
-    mainWindow.loadFile(path.join(__dirname, "../views/welcome/index.html"));
-  } else {
-    mainWindow.loadFile(path.join(__dirname, "../views/main/index.html"));
-  }
-  
-  // Open the DevTools.
+  // Verifica se o usuário já possui uma conta na aplicação
+  const userIsRegistered = getUsers().length !== 0;
+
+  // Carrega o arquivo de boas-vindas ou de pomodoro para a janela da aplicação
+  // caso o usuário já esteja cadastrado, é renderizado a tela de pomodoro, mas
+  // se o usuário não estiver cadastrado, ele é redirecionado para a tela de cadastro
+  mainWindow.loadFile(
+    path.join(
+      __dirname, userIsRegistered ? "./views/main/index.html" : '/views/welcome/index.html'
+    )
+  );
+
   mainWindow.webContents.openDevTools();
 }
-
-// This method will be called when Electron has finished
-// initialization and is ready to create browser windows.
-// Some APIs can only be used after this event occurs.
+// Assim que a aplicação estiver pronta, ela chamará a função createWindow()
+// para iniciar uma janela da aplicação
 app.whenReady().then(() => {
   createWindow();
 
   app.on("activate", function () {
-    // On macOS it's common to re-create a window in the app when the
-    // dock icon is clicked and there are no other windows open.
     if (BrowserWindow.getAllWindows().length === 0) createWindow();
   });
 });
 
-// Quit when all windows are closed, except on macOS. There, it's common
-// for applications and their menu bar to stay active until the user quits
-// explicitly with Cmd + Q.
+// Quando o usuário fechar a janela, ele executa a ação de fechar a janela
 app.on("window-all-closed", () => {
+  // Verifica se o usuário está executando a aplicação no macOS,
+  // pois, para este caso, ele fecha a aplicação da maneira correta
+  // (o macOS, por padrão, minimiza a janela ao fechar e não a fecha realmente)
   if (process.platform !== "darwin") {
     app.quit();
   }
 });
-
-// In this file you can include the rest of your app"s specific main process
-// code. You can also put them in separate files and require them here.

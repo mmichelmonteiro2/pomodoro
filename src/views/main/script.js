@@ -1,119 +1,157 @@
+// Utiliza o JS DOM para armazenar todos os elementos que serão dinâmicos nesta
+// aplicação
 const minutesLabel = document.getElementById('minutes');
 const secondsLabel = document.getElementById('seconds');
 const quoteLabel = document.getElementById('quote');
-
 const startButton = document.querySelector('.button.start-countdown');
 const pauseButton = document.querySelector('.button.pause-countdown');
 const stopButton = document.querySelector('.button.stop-countdown');
-
 const greetingsDiv = document.getElementById('greetings');
 const focusDiv = document.getElementById('focus');
 const restDiv = document.getElementById('rest');
-
 const usernameSpan = document.querySelectorAll('.username');
 
+// Inicializa objetos e variáveis de configurações do pomodoro
 const timerSettings = {};
 let timerInterval;
 let quoteInterval;
 
+// Atribui o nome do usuário (oriundo do banco de dados) para cada elemento onde
+// o nome dele deve aparecer em tela
 usernameSpan.forEach((span) => {
   span.innerText = getUsersSettings().name;
 })
 
+// Função para acessar o banco de dados e listar todos os usuários cadastrados
 function getUsersSettings() {
   const users = window.api.getUsers();
   return users[0];
 }
 
+// Inicializa as configurações para o timer iniciar de forma adequada
 function timerSetup() {
+  // Captura quanto tempo o usuário definiu de foco e descanso
   const { focus_time, rest_time } = getUsersSettings();
 
-  timerSettings.isPaused = false;
-  timerSettings.isRestTime = false;
-  timerSettings.focusTime = 0.1 * 60;
-  timerSettings.restTime = 0.2 * 60;
+  // Inicializa o objeto timerSettings com propriedades fundamentais para execução
+  // do pomodoro
+  timerSettings.isPaused    =  false;            // Não está pausado
+  timerSettings.isRestTime  =  false;            // Está em tempo de foco
+  timerSettings.focusTime   =  focus_time * 60;  // Atribui o tempo de foco em minutos
+  timerSettings.restTime    =  rest_time * 60;   // Atribui o tempo de descanso em minutos
 
+  // Esconde os botões de pausar e parar o pomodo e deixa apenas visível
+  // o botão de iniciar. Por fim, esconde as citações.
   startButton.style.display = 'inline';
   pauseButton.style.display = 'none';
   stopButton.style.display = 'none';
   quoteLabel.style.display = 'none';
-
   greetingsDiv.style.display = 'block';
   focusDiv.style.display = 'none';
   restDiv.style.display = 'none';
 
+  // Caso a aplicação não esteja armazenando o tempo de foco, tempo de descanso
+  // e quantidade total de ciclos do pomodoro, ele inicializa este armazenamento
+  // inicialmente com o valor 0.
   if (!localStorage.getItem("focus_time_total"))
     localStorage.setItem("focus_time_total", 0);
-
   if (!localStorage.getItem("rest_time_total"))
     localStorage.setItem("rest_time_total", 0);
-
   if (!localStorage.getItem("cycles_total"))
     localStorage.setItem("cycles_total", 0);
 
+  // Atualiza o display com os minutos atuais do pomodoro de acordo com o que o
+  // usuário definiu no banco de dados
   updateDisplay(timerSettings.focusTime);
 }
 
+// Inicializa a configuração inicial do timer.
 timerSetup();
 
+// Função para iniciar o pomdoro
 function startPomodoro() {
+  // Faz um registro no banco de dados que um pomodoro acabou de ser iniciado
   window.api.startPomodoro();
+  // Inicia o timer
   startTimer();
 }
 
+// Função para finalizar o pomodoro
 function endPomodoro() {
+  // Captura o tempo total de foco, descanso e a quantidade total de ciclos
+  // de pomodoro e converte para número.
   const totalFocusTime = Number(localStorage.getItem("focus_time_total"));
   const totalRestTime = Number(localStorage.getItem("rest_time_total"));
   const totalCycles = Number(localStorage.getItem("cycles_total"));
 
+  // Atualiza o pomodoro que estava em andamento para finalizado e salva as
+  // estatísticas citadas no comentário acima neste pomodoro finalizado.
   window.api.endPomodoro(totalFocusTime, totalRestTime, totalCycles);
 
+  // Redefine as métricas para 0 com intuito de não impactar outros pomodoros futuros.
   localStorage.setItem("focus_time_total", 0)
   localStorage.setItem("rest_time_total", 0)
   localStorage.setItem("cycles_total", 0)
   
+  // Para o timer.
   stopTimer();
 }
 
+// Inicia o relógio (timer)
 function startTimer() {
+  // Mostra a frase de foco e esconde a frase de início de pomodoro
   greetingsDiv.style.display = 'none';
   focusDiv.style.display = 'block';
 
+  // Esconde o botão de iniciar e deixa apenas disponível os botões de parar e pausar
   startButton.style.display = 'none';
   pauseButton.style.display = 'inline';
   stopButton.style.display = 'inline';
 
+  // Armazena os segundos restantes para o término do tempo de foco em uma variável
   let secondsRemaining = timerSettings.focusTime;
+  // Define qual tipo de métrica vai alterar (tempo total de descanso ou tempo total de foco)
   let localStorageTimer = "focus_time_total";
-
   
+  // Atualiza o display com os segundos restantes do tempo de foco
   updateDisplay(secondsRemaining);
+  // Dispara função para mostrar frases aleatórias de motivação para o usuário
   showRandomQuote();
 
+  // Inicializa uma função de intervalo que rodará de um em um segundo.
   timerInterval = setInterval(() => {
+    // Apenas executa o timer se ele não estiver pausado
     if (!timerSettings.isPaused) {
+      // Subtrai um segundo do tempo restante do timer
       secondsRemaining -= 1;
   
+      // Atualiza no display que o tempo acaba de ser subtraído por um
       updateDisplay(secondsRemaining);
 
+      // Armazena na métrica que um segundo já se passou
       localStorage.setItem(
         localStorageTimer,
         Number(localStorage.getItem(localStorageTimer)) + 1
       );
 
+      // Se a contagem de segundos restantes chegou a zero e ele já passou pelo tempo
+      // de descanso, então reinicia um ciclo (inicia novamente o tempo de foco)
       if (secondsRemaining === 0 && timerSettings.isRestTime) {
         restartTimer();
       }
-      else if (secondsRemaining === 0 && !timerSettings.isRestTime) {
-        timerSettings.isRestTime = true;
-        localStorageTimer = "rest_time_total";
-        secondsRemaining = timerSettings.restTime;
-        restDiv.style.display = 'block';
-        focusDiv.style.display = 'none';
+      // Se a contagem de segundos chegou a zero e ele ainda não entrou no tempo de descanso,
+      // então ele inicia a contagem dos segundos de descanso
+      else if (secondsRemaining === 0 && !timerSettings.isRestTime) { 
+        timerSettings.isRestTime = true;                   // Altera o estado para tempo de descanso
+        localStorageTimer        = "rest_time_total";      // Atualiza as métricas de descanso (ao invés de foco)
+        secondsRemaining         = timerSettings.restTime; // Atualiza os segundos restantes de 0 para a quantidade tempo de descanso
+        restDiv.style.display    = 'block';                // Mostra o texto de descanso informando que o usuário pode descansar
+        focusDiv.style.display   = 'none';                 // Remove o texto de foco
       }
     }
   }, 1000);
 
+  // Atualiza a citação motivacional de 5 em 5 segundos
   quoteInterval = setInterval(() => {
     if (!timerSettings.isPaused) {
       showRandomQuote();
@@ -121,29 +159,43 @@ function startTimer() {
   }, 5000);
 }
 
+// Pausa o relógio (timer)
 function pauseTimer() {
+  // Pausa (ou despausa) o timer
   timerSettings.isPaused = !timerSettings.isPaused;
+
+  // Se ele já estiver pausado, altera o texto do botão para 'Retomar Ciclo'
   if (timerSettings.isPaused) pauseButton.innerText = 'Retomar Ciclo';
+  // Caso contrário, o texto do botão é definido para 'Pausar Ciclo'
   else pauseButton.innerText = 'Pausar Ciclo';
 }
 
+// Reinicia o ciclo do relógio (timer)
 function restartTimer() {
+  // Conta um ciclo de pomodoro realizado
   localStorage.setItem(
     "cycles_total",
     Number(localStorage.getItem("cycles_total")) + 1
   );
+  
+  // Limpa os intervalos do timer e das citações
   clearTimeout(timerInterval);
   clearTimeout(quoteInterval);
+
+  // Reconfigura o timer
   timerSetup();
+  // Inicia o timer
   startTimer();
 }
 
+// Para o relógio (timer)
 function stopTimer() {
   clearTimeout(timerInterval);
   clearTimeout(quoteInterval);
   timerSetup();
 }
 
+// Função para atualizar os valores no display
 function updateDisplay(secondsRemaining) {
   const seconds = secondsRemaining % 60;
   const minutes = Math.floor(secondsRemaining / 60);
@@ -152,9 +204,12 @@ function updateDisplay(secondsRemaining) {
   secondsLabel.innerText = String(seconds).padStart(2, '0');
 }
 
+// Função para mostrar as citações
 function showRandomQuote() {
+  // Mostra o elemento de citação
   quoteLabel.style.display = 'inline';
 
+  // Array com as citações motivacionais
   const quotes = [
     "Todos os dias são uma oportunidade para recomeçar e para planejar um novo caminho. Siga com fé e acredite em você.",
     "A palavra “impossível” foi inventada para ser desafiada.",
@@ -221,6 +276,8 @@ function showRandomQuote() {
     "Nem todas as batalhas são feitas de vitória, mas todas elas são feitas de esforços, de aprendizagens e de recompensas."
   ];
 
+  // Seleciona um índice aleatório deste array e retorna o seu valor (citação)
   const randomQuote = quotes[(Math.random() * quotes.length) | 0]
+  // Atualiza em tela para visualização do usuário
   quoteLabel.innerText = randomQuote;
 }
