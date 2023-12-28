@@ -50,6 +50,7 @@ section#timer {
 
 #quote {
   display: none;
+  max-width: 600px;
 }
 
 button.button {
