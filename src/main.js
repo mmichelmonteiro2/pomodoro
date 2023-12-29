@@ -1,5 +1,7 @@
 const { app, BrowserWindow } = require("electron");
+
 const { getUsers } = require("./database/dao/users.dao");
+const { removePomodoroUncompleted } = require("./database/dao/pomodoros.dao")
 
 const path = require("path");
 
@@ -39,6 +41,9 @@ app.whenReady().then(() => {
 
 // Quando o usuário fechar a janela, ele executa a ação de fechar a janela
 app.on("window-all-closed", () => {
+  // Apaga todos os pomodoros que não foram finalizados corretamente.
+  removePomodoroUncompleted();
+  
   // Verifica se o usuário está executando a aplicação no macOS,
   // pois, para este caso, ele fecha a aplicação da maneira correta
   // (o macOS, por padrão, minimiza a janela ao fechar e não a fecha realmente)

@@ -44,9 +44,16 @@ function clearHistory() {
   statement.run();
 }
 
+function removePomodoroUncompleted() {
+  const sql = `DELETE FROM pomodoros WHERE ended_at IS NULL`;
+  const statement = connection.prepare(sql);
+  statement.run();
+}
+
 module.exports = {
   getHistory,
   startPomodoro,
   clearHistory,
-  endPomodoro
+  endPomodoro,
+  removePomodoroUncompleted
 };
