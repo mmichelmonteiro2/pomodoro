@@ -10,6 +10,7 @@ const greetingsDiv = document.getElementById('greetings');
 const focusDiv = document.getElementById('focus');
 const restDiv = document.getElementById('rest');
 const usernameSpan = document.querySelectorAll('.username');
+const actionsDiv = document.querySelector('.actions');
 
 // Inicializa objetos e variáveis de configurações do pomodoro
 const timerSettings = {};
@@ -72,6 +73,11 @@ timerSetup();
 function startPomodoro() {
   // Faz um registro no banco de dados que um pomodoro acabou de ser iniciado
   window.api.startPomodoro();
+
+  // Impedir que o usuário acesse painel de configurações e métricas enquanto um
+  // pomodoro estiver em execução
+  actionsDiv.style.display = 'none';
+
   // Inicia o timer
   startTimer();
 }
@@ -92,6 +98,9 @@ function endPomodoro() {
   localStorage.setItem("focus_time_total", 0)
   localStorage.setItem("rest_time_total", 0)
   localStorage.setItem("cycles_total", 0)
+
+  // Retornar acesso ao painel de configurações e métricas
+  actionsDiv.style.display = 'block';
   
   // Para o timer.
   stopTimer();
