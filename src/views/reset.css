@@ -1,3 +1,39 @@
+@font-face {
+  font-family: "Inter";
+  src: url("../assets/fonts/Inter/static/Inter-Regular.ttf") format("truetype");
+  font-weight: normal;
+}
+
+@font-face {
+  font-family: "Inter";
+  src: url("../assets/fonts/Inter/static/Inter-Bold.ttf") format("truetype");
+  font-weight: bolder;
+}
+
+@font-face {
+  font-family: "Inter";
+  src: url("../assets/fonts/Inter/static/Inter-SemiBold.ttf") format("truetype");
+  font-weight: bold;
+}
+
+@font-face {
+  font-family: "Inter";
+  src: url("../assets/fonts/Inter/static/Inter-Light.ttf") format("truetype");
+  font-weight: normal;
+}
+
+@font-face {
+  font-family: "Inter";
+  src: url("../assets/fonts/Inter/static/Inter-SemiBold.ttf") format("truetype");
+  font-weight: bolder;
+}
+
+@font-face {
+  font-family: "Rajdhani";
+  src: url("../assets/fonts/Rajdhani/Rajdhani-SemiBold.ttf") format("truetype");
+  font-weight: bolder;
+}
+
 * { 
   margin: 0;
   padding: 0;

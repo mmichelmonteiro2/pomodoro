@@ -33,7 +33,7 @@ header {
 
 section#timer {
   color: var(--text);
-  font-family: 'Rajdhani';
+  font-family: 'Rajdhani', sans-serif;
   font-weight: 600;
   font-size: 120px;
   
