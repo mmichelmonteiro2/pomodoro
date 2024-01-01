@@ -13,6 +13,25 @@ const focusTimeElement = document.getElementById('focus-time');
 const restTimeElement = document.getElementById('rest-time');
 const userNameElement = document.getElementById('name');
 
+focusTimeElement.addEventListener('input', function(event) {
+  let inputValue = event.target.value;
+
+  // Permite apenas números entre 00 e 59
+  const isValidInput = 
+    /^\d{0,2}$/.test(inputValue) && Number(inputValue) >= 0 && Number(inputValue) < 60;
+
+  if (!isValidInput) {
+    // Remove caracteres não numéricos
+    inputValue = inputValue.replace(/\D/g, '');
+    
+    // Limita apenas a dois dígitos
+    inputValue = inputValue.slice(0, 2);
+
+    // Atualiza o valor do input
+    event.target.value = inputValue;
+  }
+});
+
 // Elemento pai de todos os passos de cadastro do usuário
 const steps = document.querySelectorAll('div.step-container');
 
