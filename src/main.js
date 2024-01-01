@@ -13,6 +13,7 @@ function createWindow() {
       preload: path.join(__dirname, "preload.js"),
     },
     width: 800,
+    resizable: false
   });
 
   // Verifica se o usuário já possui uma conta na aplicação

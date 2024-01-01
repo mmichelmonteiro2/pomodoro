@@ -17,10 +17,13 @@ const timerSettings = {};
 let timerInterval;
 let quoteInterval;
 
+// Busca o nome do usuário no banco de dados
+const userName = getUsersSettings().name;
+
 // Atribui o nome do usuário (oriundo do banco de dados) para cada elemento onde
 // o nome dele deve aparecer em tela
 usernameSpan.forEach((span) => {
-  span.innerText = getUsersSettings().name;
+  span.innerText = userName;
 })
 
 // Função para acessar o banco de dados e listar todos os usuários cadastrados
@@ -38,8 +41,8 @@ function timerSetup() {
   // do pomodoro
   timerSettings.isPaused    =  false;            // Não está pausado
   timerSettings.isRestTime  =  false;            // Está em tempo de foco
-  timerSettings.focusTime   =  focus_time * 60;  // Atribui o tempo de foco em minutos
-  timerSettings.restTime    =  rest_time * 60;   // Atribui o tempo de descanso em minutos
+  timerSettings.focusTime   =  0.1 * 60;  // Atribui o tempo de foco em minutos
+  timerSettings.restTime    =  0.1 * 60;   // Atribui o tempo de descanso em minutos
 
   // Esconde os botões de pausar e parar o pomodo e deixa apenas visível
   // o botão de iniciar. Por fim, esconde as citações.
@@ -108,6 +111,8 @@ function endPomodoro() {
 
 // Inicia o relógio (timer)
 function startTimer() {
+  // Mostra uma notificação no computador
+  dispatchNotification(`${userName}, esteja focado 🧠`, `O seu tempo de foco acaba de começar!`);
   // Mostra a frase de foco e esconde a frase de início de pomodoro
   greetingsDiv.style.display = 'none';
   focusDiv.style.display = 'block';
@@ -150,7 +155,9 @@ function startTimer() {
       }
       // Se a contagem de segundos chegou a zero e ele ainda não entrou no tempo de descanso,
       // então ele inicia a contagem dos segundos de descanso
-      else if (secondsRemaining === 0 && !timerSettings.isRestTime) { 
+      else if (secondsRemaining === 0 && !timerSettings.isRestTime) {
+        // Mostra uma notificação no computador
+        dispatchNotification(`${userName}, que tal descansar agora? 🤩`, `O seu tempo de foco acabou, aproveite o tempo de descanso para retornar com as energias renovadas.`);
         timerSettings.isRestTime = true;                   // Altera o estado para tempo de descanso
         localStorageTimer        = "rest_time_total";      // Atualiza as métricas de descanso (ao invés de foco)
         secondsRemaining         = timerSettings.restTime; // Atualiza os segundos restantes de 0 para a quantidade tempo de descanso
@@ -289,4 +296,9 @@ function showRandomQuote() {
   const randomQuote = quotes[(Math.random() * quotes.length) | 0]
   // Atualiza em tela para visualização do usuário
   quoteLabel.innerText = randomQuote;
+}
+
+// Função para mostrar uma notificação no computador
+function dispatchNotification(title, message) {
+  new window.Notification(title, { body: message });
 }
