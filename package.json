@@ -1,16 +1,39 @@
 {
   "name": "pomodoro-timer",
+  "author": "Michel Monteiro",
   "version": "1.0.0",
   "description": "A Pomodoro software",
+  "license": "MIT",
   "scripts": {
-    "start": "electron ./src/main.js"
+    "start": "electron ./src/main.js",
+    "postinstall": "electron-builder install-app-deps"
   },
-  "author": "Michel Monteiro",
   "devDependencies": {
     "electron": "^16.0.2",
+    "electron-builder": "^24.9.1",
     "electron-rebuild": "^3.2.5"
   },
   "dependencies": {
     "better-sqlite3-with-prebuilds": "^7.4.3"
+  },
+  "overrides": { "electron-rebuild": { "node-abi": "^3.47.0" } },
+  "resolutions": {
+    "node-abi": "^3.47.0"
+  },
+  "build": {
+    "appId": "com.michelmonteiro.pomodoro",
+    "productName": "Pomodoro",
+    "directories": {
+      "output": "dist"
+    },
+    "win": {
+      "target": "nsis"
+    },
+    "mac": {
+      "target": "dmg"
+    },
+    "linux": {
+      "target": "AppImage"
+    }
   }
 }
