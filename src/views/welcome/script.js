@@ -70,10 +70,10 @@ function handleSetFocusTime() {
 }
 
 // Termina a configuração
-function finishSetup() {
+async function finishSetup() {
   const { name, focusTime, restTime } = userSettings;
   // Salva no banco de dados o usuário
-  window.api.insertUser(name, focusTime, restTime);
+  await window.api.insertUser(name, focusTime, restTime);
   
   // Retorna para a tela principal do timer
   window.location.href = '../main/index.html';

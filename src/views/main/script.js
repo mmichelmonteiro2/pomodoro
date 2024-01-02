@@ -18,31 +18,34 @@ let timerInterval;
 let quoteInterval;
 
 // Busca o nome do usuário no banco de dados
-const userName = getUsersSettings().name;
+let userName;
 
 // Atribui o nome do usuário (oriundo do banco de dados) para cada elemento onde
 // o nome dele deve aparecer em tela
-usernameSpan.forEach((span) => {
-  span.innerText = userName;
-})
+window.api.getUsers().then(data => { 
+  userName = data[0].name;  
+  usernameSpan.forEach((span) => {
+    span.innerText = userName;
+  })
+}).catch(error => console.error(error));
 
 // Função para acessar o banco de dados e listar todos os usuários cadastrados
-function getUsersSettings() {
-  const users = window.api.getUsers();
+async function getUsersSettings() {
+  const users = await window.api.getUsers();
   return users[0];
 }
 
 // Inicializa as configurações para o timer iniciar de forma adequada
-function timerSetup() {
+async function timerSetup() {
   // Captura quanto tempo o usuário definiu de foco e descanso
-  const { focus_time, rest_time } = getUsersSettings();
+  const { focus_time, rest_time } = await getUsersSettings();
 
   // Inicializa o objeto timerSettings com propriedades fundamentais para execução
   // do pomodoro
   timerSettings.isPaused    =  false;            // Não está pausado
   timerSettings.isRestTime  =  false;            // Está em tempo de foco
-  timerSettings.focusTime   =  0.1 * 60;  // Atribui o tempo de foco em minutos
-  timerSettings.restTime    =  0.1 * 60;   // Atribui o tempo de descanso em minutos
+  timerSettings.focusTime   =  focus_time * 60;  // Atribui o tempo de foco em minutos
+  timerSettings.restTime    =  rest_time * 60;   // Atribui o tempo de descanso em minutos
 
   // Esconde os botões de pausar e parar o pomodo e deixa apenas visível
   // o botão de iniciar. Por fim, esconde as citações.
@@ -75,18 +78,18 @@ timerSetup();
 // Função para iniciar o pomdoro
 function startPomodoro() {
   // Faz um registro no banco de dados que um pomodoro acabou de ser iniciado
-  window.api.startPomodoro();
+  window.api.startPomodoro(1).then(() => {
+    // Impedir que o usuário acesse painel de configurações e métricas enquanto um
+    // pomodoro estiver em execução
+    actionsDiv.style.display = 'none';
 
-  // Impedir que o usuário acesse painel de configurações e métricas enquanto um
-  // pomodoro estiver em execução
-  actionsDiv.style.display = 'none';
-
-  // Inicia o timer
-  startTimer();
+    // Inicia o timer
+    startTimer();
+  }).catch((error) => console.log(error));  
 }
 
 // Função para finalizar o pomodoro
-function endPomodoro() {
+async function endPomodoro() {
   // Captura o tempo total de foco, descanso e a quantidade total de ciclos
   // de pomodoro e converte para número.
   const totalFocusTime = Number(localStorage.getItem("focus_time_total"));
@@ -95,7 +98,7 @@ function endPomodoro() {
 
   // Atualiza o pomodoro que estava em andamento para finalizado e salva as
   // estatísticas citadas no comentário acima neste pomodoro finalizado.
-  window.api.endPomodoro(totalFocusTime, totalRestTime, totalCycles);
+  await window.api.endPomodoro(totalFocusTime, totalRestTime, totalCycles);
 
   // Redefine as métricas para 0 com intuito de não impactar outros pomodoros futuros.
   localStorage.setItem("focus_time_total", 0)

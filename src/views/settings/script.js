@@ -47,11 +47,11 @@ function handleSetFocusTime() {
 }
 
 // Termina a configuração
-function finishSetup() {
+async function finishSetup() {
   const { focusTime, restTime } = timerSettings;
 
   // Salva no banco de dados as novas configurações de tempo do usuário
-  window.api.updateTimer(focusTime, restTime);
+  await window.api.updateTimer(focusTime, restTime);
   // Retorna para a tela principal do timer
   window.location.href = '../main/index.html';
 }

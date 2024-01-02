@@ -1,28 +1,29 @@
 const { contextBridge } = require("electron");
 
-const { 
-  getUsers: getUsersDAO,
-  insertUser: insertUserDAO,
-  updateTimer: updateTimerDAO
-} = require("./database/dao/users.dao");
 const {
-  startPomodoro: startPomodoroDAO,
-  endPomodoro: endPomodoroDAO,
-  getHistory: getHistoryDAO,
-  clearHistory: clearHistoryDAO
-} = require("./database/dao/pomodoros.dao");
+  createUser,
+  listUsers,
+  updateUserTimers
+} = require('../src/database/repositories/users-repository')
+
+const { 
+  createPomodoro,
+  deleteAllPomodoros,
+  endPomodoro: stopPomodoro,
+  listPomodoros
+} = require('../src/database/repositories/pomodoros-repository');
 
 // Importa todas as manipulações no banco de dados para as entidades "users" e
 // "pomodoros", as declara em arrow functions e prepara sua execução
 
-const getUsers = () => getUsersDAO();
-const insertUser = (name, focusTime, restTime) => insertUserDAO(name, focusTime, restTime);
-const updateTimer = (focusTime, restTime) => updateTimerDAO(focusTime, restTime);
+const getUsers = async () => await listUsers();
+const insertUser = async (name, focusTime, restTime) => await createUser(name, focusTime, restTime);
+const updateTimer = async (focusTime, restTime) => await updateUserTimers(1, focusTime, restTime);
 
-const startPomodoro = () => startPomodoroDAO();
-const endPomodoro = (focusTime, restTime, finishedCount) => endPomodoroDAO(focusTime, restTime, finishedCount);
-const getHistory = () => getHistoryDAO();
-const clearHistory = () => clearHistoryDAO();
+const startPomodoro = async (userId) => await createPomodoro(userId);
+const endPomodoro = async (focusTime, restTime, finishedCount) => await stopPomodoro(focusTime, restTime, finishedCount);
+const getHistory = async () => await listPomodoros();
+const clearHistory = async () => await deleteAllPomodoros();
 
 // Guarda todas as arrow functions neste objeto
 const api = {

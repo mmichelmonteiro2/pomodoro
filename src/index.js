@@ -1,23 +1,23 @@
 const { app, BrowserWindow } = require("electron");
 
-const { getUsers } = require("./database/dao/users.dao");
-const { removePomodoroUncompleted } = require("./database/dao/pomodoros.dao")
+const { listUsers } = require('../src/database/repositories/users-repository');
+const { deleteUncompletedPomodoros } = require('../src/database/repositories/pomodoros-repository');
 
 const path = require("path");
 
-function createWindow() {
+async function createWindow() {
   // Cria a janela da aplicação com 600 de altura para 800 de largura
   const mainWindow = new BrowserWindow({
-    height: 600,
     webPreferences: {
       preload: path.join(__dirname, "preload.js"),
+      devTools: true,
     },
     width: 800,
-    resizable: false
+    height: 600
   });
 
   // Verifica se o usuário já possui uma conta na aplicação
-  const userIsRegistered = getUsers().length !== 0;
+  const userIsRegistered = await listUsers().length !== 0;
 
   // Carrega o arquivo de boas-vindas ou de pomodoro para a janela da aplicação
   // caso o usuário já esteja cadastrado, é renderizado a tela de pomodoro, mas
@@ -27,9 +27,8 @@ function createWindow() {
       __dirname, userIsRegistered ? "./views/main/index.html" : '/views/welcome/index.html'
     )
   );
-
-  mainWindow.webContents.openDevTools();
 }
+
 // Assim que a aplicação estiver pronta, ela chamará a função createWindow()
 // para iniciar uma janela da aplicação
 app.whenReady().then(() => {
@@ -43,7 +42,7 @@ app.whenReady().then(() => {
 // Quando o usuário fechar a janela, ele executa a ação de fechar a janela
 app.on("window-all-closed", () => {
   // Apaga todos os pomodoros que não foram finalizados corretamente.
-  removePomodoroUncompleted();
+  deleteUncompletedPomodoros();
   
   // Verifica se o usuário está executando a aplicação no macOS,
   // pois, para este caso, ele fecha a aplicação da maneira correta
