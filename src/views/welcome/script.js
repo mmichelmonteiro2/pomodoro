@@ -1,17 +1,17 @@
 // Variável de controle para definir em qual passo do formulário o usuário se encontra
 let activeFormPosition = 0;
 
-// Objeto de configurações iniciais de um novo usuário
-const userSettings = {
-  name: null,
-  focusTime: 0,
-  restTime: 0
-}
-
 // Inputs de tempo de foco, tempo de descanso e nome do usuário são capturados
 const focusTimeElement = document.getElementById('focus-time');
 const restTimeElement = document.getElementById('rest-time');
 const userNameElement = document.getElementById('name');
+
+// Objeto de configurações iniciais de um novo usuário
+const userSettings = {
+  name: null,
+  focusTime: Number(focusTimeElement.value),
+  restTime: Number(restTimeElement.value)
+}
 
 focusTimeElement.addEventListener('input', function(event) {
   let inputValue = event.target.value;
@@ -70,10 +70,11 @@ function handleSetFocusTime() {
 }
 
 // Termina a configuração
-async function finishSetup() {
+function finishSetup() {
   const { name, focusTime, restTime } = userSettings;
+
   // Salva no banco de dados o usuário
-  await window.api.insertUser(name, focusTime, restTime);
+  window.api.insertUser(name, focusTime, restTime);
   
   // Retorna para a tela principal do timer
   window.location.href = '../main/index.html';

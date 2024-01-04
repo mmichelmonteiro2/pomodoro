@@ -18,28 +18,28 @@ let timerInterval;
 let quoteInterval;
 
 // Busca o nome do usuário no banco de dados
-let userName;
+const user = window.api.getUsers()[0];
 
 // Atribui o nome do usuário (oriundo do banco de dados) para cada elemento onde
 // o nome dele deve aparecer em tela
-window.api.getUsers().then(data => { 
-  userName = data[0].name;  
-  usernameSpan.forEach((span) => {
-    span.innerText = userName;
-  })
-}).catch(error => console.error(error));
+usernameSpan.forEach((span) => {
+  span.innerText = user.name;
+});
+
+if (!localStorage.getItem("user_id") || localStorage.getItem("user_id") !== user.id) {
+  localStorage.setItem("user_id", user.id);
+}
 
 // Função para acessar o banco de dados e listar todos os usuários cadastrados
-async function getUsersSettings() {
-  const users = await window.api.getUsers();
+function getUsersSettings() {
+  const users = window.api.getUsers();
   return users[0];
 }
 
 // Inicializa as configurações para o timer iniciar de forma adequada
-async function timerSetup() {
+function timerSetup() {
   // Captura quanto tempo o usuário definiu de foco e descanso
-  const { focus_time, rest_time } = await getUsersSettings();
-
+  const { focus_time, rest_time } = getUsersSettings();
   // Inicializa o objeto timerSettings com propriedades fundamentais para execução
   // do pomodoro
   timerSettings.isPaused    =  false;            // Não está pausado
@@ -78,18 +78,18 @@ timerSetup();
 // Função para iniciar o pomdoro
 function startPomodoro() {
   // Faz um registro no banco de dados que um pomodoro acabou de ser iniciado
-  window.api.startPomodoro(1).then(() => {
-    // Impedir que o usuário acesse painel de configurações e métricas enquanto um
-    // pomodoro estiver em execução
-    actionsDiv.style.display = 'none';
+  window.api.startPomodoro();
 
-    // Inicia o timer
-    startTimer();
-  }).catch((error) => console.log(error));  
+  // Impedir que o usuário acesse painel de configurações e métricas enquanto um
+  // pomodoro estiver em execução
+  actionsDiv.style.display = 'none';
+
+  // Inicia o timer
+  startTimer();
 }
 
 // Função para finalizar o pomodoro
-async function endPomodoro() {
+function endPomodoro() {
   // Captura o tempo total de foco, descanso e a quantidade total de ciclos
   // de pomodoro e converte para número.
   const totalFocusTime = Number(localStorage.getItem("focus_time_total"));
@@ -98,7 +98,7 @@ async function endPomodoro() {
 
   // Atualiza o pomodoro que estava em andamento para finalizado e salva as
   // estatísticas citadas no comentário acima neste pomodoro finalizado.
-  await window.api.endPomodoro(totalFocusTime, totalRestTime, totalCycles);
+  window.api.endPomodoro(totalFocusTime, totalRestTime, totalCycles);
 
   // Redefine as métricas para 0 com intuito de não impactar outros pomodoros futuros.
   localStorage.setItem("focus_time_total", 0)
@@ -115,7 +115,7 @@ async function endPomodoro() {
 // Inicia o relógio (timer)
 function startTimer() {
   // Mostra uma notificação no computador
-  dispatchNotification(`${userName}, esteja focado 🧠`, `O seu tempo de foco acaba de começar!`);
+  dispatchNotification(`${user.name}, esteja focado 🧠`, `O seu tempo de foco acaba de começar!`);
   // Mostra a frase de foco e esconde a frase de início de pomodoro
   greetingsDiv.style.display = 'none';
   focusDiv.style.display = 'block';
@@ -160,7 +160,7 @@ function startTimer() {
       // então ele inicia a contagem dos segundos de descanso
       else if (secondsRemaining === 0 && !timerSettings.isRestTime) {
         // Mostra uma notificação no computador
-        dispatchNotification(`${userName}, que tal descansar agora? 🤩`, `O seu tempo de foco acabou, aproveite o tempo de descanso para retornar com as energias renovadas.`);
+        dispatchNotification(`${user.name}, que tal descansar agora? 🤩`, `O seu tempo de foco acabou, aproveite o tempo de descanso para retornar com as energias renovadas.`);
         timerSettings.isRestTime = true;                   // Altera o estado para tempo de descanso
         localStorageTimer        = "rest_time_total";      // Atualiza as métricas de descanso (ao invés de foco)
         secondsRemaining         = timerSettings.restTime; // Atualiza os segundos restantes de 0 para a quantidade tempo de descanso

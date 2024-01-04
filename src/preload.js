@@ -16,14 +16,14 @@ const {
 // Importa todas as manipulações no banco de dados para as entidades "users" e
 // "pomodoros", as declara em arrow functions e prepara sua execução
 
-const getUsers = async () => await listUsers();
-const insertUser = async (name, focusTime, restTime) => await createUser(name, focusTime, restTime);
-const updateTimer = async (focusTime, restTime) => await updateUserTimers(1, focusTime, restTime);
+const getUsers = () => listUsers();
+const insertUser =  (name, focusTime, restTime) => createUser(name, focusTime, restTime);
+const updateTimer = (userId, focusTime, restTime) => updateUserTimers(userId, focusTime, restTime);
 
-const startPomodoro = async (userId) => await createPomodoro(userId);
-const endPomodoro = async (focusTime, restTime, finishedCount) => await stopPomodoro(focusTime, restTime, finishedCount);
-const getHistory = async () => await listPomodoros();
-const clearHistory = async () => await deleteAllPomodoros();
+const startPomodoro = () => createPomodoro();
+const endPomodoro = (focusTime, restTime, finishedCount) => stopPomodoro(focusTime, restTime, finishedCount);
+const getHistory = () => listPomodoros();
+const clearHistory = () => deleteAllPomodoros();
 
 // Guarda todas as arrow functions neste objeto
 const api = {

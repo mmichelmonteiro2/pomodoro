@@ -1,48 +1,20 @@
 {
   "name": "pomodoro-timer",
+  "productName": "Pomodoro",
   "author": "Michel Monteiro",
   "version": "1.0.0",
   "description": "A Pomodoro software",
   "license": "MIT",
   "scripts": {
-    "start": "electron ./src/index.js",
-    "migration:run": "sequelize-cli db:migrate",
-    "migration:revert": "sequelize-cli db:migrate:undo"
+    "start": "electron ./index.js",
+    "build": "electron-packager . --out=./dist --icon=favicon.ico"
   },
+  "icon": "favicon.ico",
   "dependencies": {
-    "sequelize": "^6.35.2",
-    "sqlite3": "^5.1.7-rc.0"
+    "uuid": "^9.0.1"
   },
   "devDependencies": {
     "electron": "^16.0.2",
-    "electron-builder": "^24.9.1",
-    "electron-packager": "^3.2.0",
-    "electron-prebuilt": "^1.4.13",
-    "electron-rebuild": "^3.2.5",
-    "sequelize-cli": "^6.6.2"
-  },
-  "overrides": {
-    "electron-rebuild": {
-      "node-abi": "^3.47.0"
-    }
-  },
-  "resolutions": {
-    "node-abi": "^3.47.0"
-  },
-  "build": {
-    "appId": "com.michelmonteiro.pomodoro",
-    "productName": "Pomodoro",
-    "directories": {
-      "output": "dist"
-    },
-    "win": {
-      "target": "nsis"
-    },
-    "mac": {
-      "target": "dmg"
-    },
-    "linux": {
-      "target": "AppImage"
-    }
+    "electron-packager": "^17.1.2"
   }
 }

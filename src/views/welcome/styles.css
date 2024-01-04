@@ -100,7 +100,12 @@ input[type=number] {
   justify-content: center;
 }
 
+.pomodoro-setting-wrapper input {
+  width: 100px;
+}
+
 .pomodoro-setting-wrapper span {
   font-size: 50px;
   margin-right: .85rem;
+  margin-left: .85rem;
 }
